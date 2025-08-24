@@ -80,9 +80,34 @@ pip install -r requirements.txt
 
 ### 2. 训练模型
 
+#### 快速开始（推荐新手）
+
+使用预设的优化配置，一键开始高质量训练：
+
+```bash
+# 查看所有可用配置
+python quick_train.py --list
+
+# 平衡配置（推荐）
+python quick_train.py balanced --data_dir LLIEDet/images
+
+# 最佳质量配置
+python quick_train.py best --data_dir LLIEDet/images
+
+# 快速训练配置
+python quick_train.py fast --data_dir LLIEDet/images
+
+# 低显存配置（4GB以下GPU）
+python quick_train.py low_memory --data_dir LLIEDet/images
+```
+
+#### 基础训练
 ```bash
 # 基础训练
-python train.py
+python train.py --data_dir LLIEDet/images --batch_size 8 --epochs 100
+
+# 使用GPU训练
+python train.py --data_dir LLIEDet/images --batch_size 16 --epochs 200 --device cuda
 
 # 自定义参数训练
 python train.py --batch_size 16 --epochs 200 --lr 1e-4 --image_size 256
@@ -90,6 +115,51 @@ python train.py --batch_size 16 --epochs 200 --lr 1e-4 --image_size 256
 # 调整损失函数权重
 python train.py --spa_weight 1 --exp_weight 10 --col_weight 5 --tv_weight 1600
 ```
+
+#### 高级训练（手动配置）
+```bash
+# 使用改进的训练脚本
+python train_advanced.py --data_dir LLIEDet/images --batch_size 16 --epochs 250 --use_amp --save_samples
+
+# 平衡型配置（推荐）
+python train_advanced.py \
+    --lr 2e-4 \
+    --batch_size 16 \
+    --epochs 250 \
+    --spa_weight 1.5 \
+    --exp_weight 15 \
+    --col_weight 8 \
+    --tv_weight 1200 \
+    --scheduler cosine \
+    --use_amp \
+    --clip_grad_norm 1.0 \
+    --early_stopping 50
+```
+
+### 自动参数调优（推荐）
+
+使用自动参数调优脚本快速找到最佳参数组合：
+
+```bash
+# 使用推荐配置（4个预设配置）
+python auto_tune_params.py --data_dir LLIEDet/images --epochs 50
+
+# 随机搜索（10个随机配置）
+python auto_tune_params.py --strategy random --num_experiments 10 --data_dir LLIEDet/images
+
+# 网格搜索（自动限制数量）
+python auto_tune_params.py --strategy grid --max_grid_size 20 --data_dir LLIEDet/images
+
+# 分析已有实验结果
+python auto_tune_params.py --analyze_only --results_dir experiments
+```
+
+自动调优功能：
+- 🎯 **智能搜索**：推荐配置、随机搜索、网格搜索
+- 📊 **自动分析**：参数重要性分析、性能排名
+- 💾 **结果保存**：完整的实验记录和配置
+- 🔄 **断点续传**：支持中断后继续分析
+- 📈 **可视化报告**：生成详细的分析报告
 
 ### 3. 评估模型
 
