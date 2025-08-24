@@ -1,6 +1,6 @@
 # Zero-DCE: 零样本低光照图像增强
 
-基于论文 "Zero-Reference Deep Curve Estimation for Low-Light Image Enhancement" 的实现，用于XTeam考核项目。
+基于论文 "Zero-Reference Deep Curve Estimation for Low-Light Image Enhancement" 的实现。
 
 ## 项目概述
 
